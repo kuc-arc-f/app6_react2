@@ -1,0 +1,97 @@
+
+<h1>Tasks - edit</h1>
+<hr />
+<div id="app"></div>
+
+<!-- -->
+<script type="text/babel">
+
+class Edit extends React.Component {
+    constructor(props) {
+        super(props);
+//        this.state = {data: ''}
+        this.state = {title: '', description: ''}
+        this.id = props.id
+        console.log(this.id)
+    }
+    handleChangeTitle(e){
+        this.setState({title: e.target.value})
+    }
+    handleChangeDesc(e){
+        this.setState({description: e.target.value})
+    }    
+    handleSubmit(e){
+        e.preventDefault()
+        const task = {
+            id: this.id,
+            title: this.state.title,
+            content: this.state.description
+        }
+        console.log(task )
+        let uri = '/api/tasks_update'
+        axios.post(uri, task ).then((response) => {
+//            window.location.href="/tasks"
+            console.log(response.data )
+            console.log("success")
+        })
+    }   
+    handleDeleteSubmit(e){
+        e.preventDefault()
+        console.log("deleteTask")
+        axios.get('/api/tasks_delete/'+this.id ).then(res =>  {
+            console.log( res.data )
+            window.location.href="/tasks"
+        })
+    }
+    componentDidMount(){
+        axios.get('/api/tasks_show/'+this.id ).then(response => {
+//            this.setState({ data: response.data.docs[0] })
+            var data = response.data.docs[0]
+            this.setState({ title: data.title })
+            this.setState({ description: data.content })
+//            console.log( this.state.content )
+        })
+        .catch(function (error) {
+            console.log(error)
+        })
+    }
+    render(){
+        return (
+            <div>
+                <form onSubmit={this.handleSubmit.bind(this)}>
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="form-group">
+                            <label>Title:</label>
+                            <input type="text" className="form-control"
+                             value={this.state.title}
+                             onChange={this.handleChangeTitle.bind(this)} />
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-6">
+                        <div className="form-group">
+                            <label>Description:</label>
+                            <input type="text" className="form-control col-md-6"
+                            value={this.state.description} 
+                            onChange={this.handleChangeDesc.bind(this)} />
+                        </div>
+                    </div>
+                </div><br />
+                <div className="form-group">
+                    <button className="btn btn-primary">Save</button>
+                </div>
+                </form>
+                <hr />
+                <form onSubmit={this.handleDeleteSubmit.bind(this)}>
+                    <button>delete </button>
+                </form>
+            </div>
+        )
+    }
+
+}
+
+ReactDOM.render(<Edit id="<%= params_id %>"  />, document.getElementById('app'));
+</script>
