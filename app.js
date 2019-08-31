@@ -11,6 +11,7 @@ var db = monk('192.168.10.104:27017/app1db');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var tasksRouter = require('./routes/tasks');
+var task2Router = require('./routes/task2');
 //api
 var apiRouter = require('./routes/api');
 
@@ -36,6 +37,7 @@ app.use(function(req,res,next){
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/tasks', tasksRouter );
+app.use('/task2', task2Router );
 //api
 app.use('/api', apiRouter );
 

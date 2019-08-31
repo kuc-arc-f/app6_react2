@@ -30,9 +30,9 @@ class Edit extends React.Component {
         console.log(task )
         let uri = '/api/tasks_update'
         axios.post(uri, task ).then((response) => {
-//            window.location.href="/tasks"
             console.log(response.data )
             console.log("success")
+            window.location.href="/tasks"
         })
     }   
     handleDeleteSubmit(e){
